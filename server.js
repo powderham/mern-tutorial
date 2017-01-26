@@ -1,14 +1,19 @@
-import http from 'http';
+import config from './config';
+import express from 'express';
+import fs from 'fs';
+const server = express();
 
-// Creating a new server
-// Argument: subscribe to event emitter (User will see anything in the response obj, request can read from the request)
-const server = http.createServer((req, res) => {
-  res.write('Hello HTTP!\n');
-  setTimeout(() => {
-    res.write('I can stream!\n');
-    res.end();
-  }, 3000);
+server.get('/', (req, res) => {
+  res.send("Working!")
 });
 
-// Running the server on the specified port
-server.listen(8080);
+// Before using the express middleware, this is how you make a route
+server.get('/about.html', (req, res) => {
+  fs.readFile('./about.html', (err, data) => {
+    res.send(data.toString());
+  });
+});
+
+server.listen(config.port, () => {
+  console.info('Express listening on port: ', config.port);
+});
