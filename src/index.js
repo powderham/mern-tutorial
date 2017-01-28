@@ -1,7 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+const App = (props) => {
+  return (
+    <h2>
+     {props.componentMessage}
+    </h2>
+  );
+};
+
+
+
 ReactDOM.render(
-  <h2>Hello React with JSX </h2>,
+  <App componentMessage="Hello World!!"/>,
   document.getElementById('root')
 );
