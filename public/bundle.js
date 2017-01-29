@@ -59,15 +59,39 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var App = function App(props) {
+	var Header = function Header(_ref) {
+	  var message = _ref.message;
+	
 	  return _react2.default.createElement(
 	    'h2',
 	    null,
-	    props.componentMessage
+	    message
 	  );
 	};
 	
-	_reactDom2.default.render(_react2.default.createElement(App, { componentMessage: 'Hello World!!' }), document.getElementById('root'));
+	Header.propTypes = {
+	  // isRequired would be redundant if a default value is provided
+	  message: _react2.default.PropTypes.string.isRequired
+	};
+	
+	Header.defaultProps = {
+	  message: "Hello World"
+	};
+	
+	var App = function App() {
+	  return _react2.default.createElement(
+	    'div',
+	    null,
+	    _react2.default.createElement(Header, { message: 'Hello World from the header' }),
+	    _react2.default.createElement(
+	      'div',
+	      null,
+	      '...'
+	    )
+	  );
+	};
+	
+	_reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById('root'));
 
 /***/ },
 /* 1 */
