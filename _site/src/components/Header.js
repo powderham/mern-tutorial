@@ -15,7 +15,7 @@ Header.propTypes = {
 
 Header.defaultProps = {
   message: "Hello World"
-};
+}
 
 //export default component name
 export default Header;

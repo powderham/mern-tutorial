@@ -1,19 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Header from './Header.js';
+import data from './testData.json';
+console.log(data);
 
-const App = () => {
-  return (
-    <div>
-      <Header message = "Hello World from the header" />
-      <div>
-        ...
-      </div>
-    </div>
-  );
-};
-
+import App from './components/App.js';
 
 ReactDOM.render(
   <App />,
