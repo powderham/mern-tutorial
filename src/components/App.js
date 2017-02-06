@@ -12,7 +12,8 @@ class App extends React.Component {
         <Header message = {this.state.pageHeader} />
         <div>
           {this.props.contests.map(contest =>
-            <ContestPreview {...contest}/>
+            // using key here because react wants a key for each child in an iterator
+            <ContestPreview key={contest.id} {...contest}/>
           )}
         </div>
       </div>
