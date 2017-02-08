@@ -10,16 +10,9 @@ class App extends React.Component {
     contests: this.props.initialContests
   }
   componentDidMount(){
-    axios.get('/api/contests')
-      .then(resp => {
-        this.setState({
-          contests: resp.data.contests
-        })
-      })
-      .catch(console.error)
+
   }
   componentWillUnmount(){
-
   }
   render(){
     return (
