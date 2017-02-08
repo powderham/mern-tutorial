@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import Header from './Header.js';
 
-import ContestPreview from './ContestPreview.js';
+import ContestList from './ContestList'
 
 class App extends React.Component {
   state = {
@@ -18,12 +18,7 @@ class App extends React.Component {
     return (
       <div>
         <Header message = {this.state.pageHeader} />
-        <div>
-          {this.state.contests.map(contest =>
-            // using key here because react wants a key for each child in an iterator
-            <ContestPreview key={contest.id} {...contest}/>
-          )}
-        </div>
+        <ContestList contests={this.state.contests} />
       </div>
     );
   };
