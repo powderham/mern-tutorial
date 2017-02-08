@@ -7,7 +7,7 @@ import ContestPreview from './ContestPreview.js';
 class App extends React.Component {
   state = {
     pageHeader: "Hello World from React",
-    contests: []
+    contests: this.props.initialContests
   }
   componentDidMount(){
     axios.get('/api/contests')

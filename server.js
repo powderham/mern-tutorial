@@ -13,12 +13,17 @@ server.use(sassMiddleware({
 
 server.set('view engine', 'ejs');
 
-import './serverRender';
+import serverRender from './serverRender';
 
 server.get('/', (req, res) => {
-  res.render('index', {
-    content: "Hello Express and EJS!"
-  });
+  console.log("content")
+  serverRender()
+    .then(content => {
+      res.render('index', {
+        content
+      });
+    })
+    .catch(console.error)
 });
 
 
