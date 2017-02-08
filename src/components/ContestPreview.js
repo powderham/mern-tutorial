@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 class ContestPreview extends Component {
+  handleClick = () => {
+    console.log(this.props.contestName)
+  }
   render() {
     return (
-      <div className="ContestPreview" onClick={  }>
+      <div className="link ContestPreview" onClick={ this.handleClick }>
         <div className="category-name">
-          {contest.categoryName}
+          {this.props.categoryName}
         </div>
         <div className="contest-name">
-          {contest.contestName}
+          {this.props.contestName}
         </div>
       </div>
     );
