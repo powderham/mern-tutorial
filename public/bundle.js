@@ -67,7 +67,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	_reactDom2.default.render(_react2.default.createElement(_App2.default, { initialContests: window.initialData.contests }), document.getElementById('root'));
+	_reactDom2.default.render(_react2.default.createElement(_App2.default, { initialData: window.initialData }), document.getElementById('root'));
 
 /***/ },
 /* 1 */
@@ -22165,6 +22165,10 @@
 	  return window.history.pushState(obj, '', url);
 	};
 	
+	var onPopState = function onPopState(handler) {
+	  window.onpopstate = handler;
+	};
+	
 	var App = function (_React$Component) {
 	  _inherits(App, _React$Component);
 	
@@ -22179,16 +22183,20 @@
 	      args[_key] = arguments[_key];
 	    }
 	
-	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = App.__proto__ || Object.getPrototypeOf(App)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-	      pageHeader: "Hello World from React",
-	      contests: _this.props.initialContests
-	    }, _this.fetchContest = function (contestId) {
+	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = App.__proto__ || Object.getPrototypeOf(App)).call.apply(_ref, [this].concat(args))), _this), _this.state = _this.props.initialData, _this.fetchContest = function (contestId) {
 	      pushState({ currentContestId: contestId }, '/contest/' + contestId);
 	      api.fetchContest(contestId).then(function (contest) {
 	        _this.setState({
-	          pageHeader: contest.contestName,
 	          currentContestId: contest.id,
 	          contests: _extends({}, _this.state.contests, _defineProperty({}, contest.id, contest))
+	        });
+	      });
+	    }, _this.fetchContestList = function () {
+	      pushState({ currentContestId: null }, '/');
+	      api.fetchContestList().then(function (contests) {
+	        _this.setState({
+	          currentContestId: null,
+	          contests: contests
 	        });
 	      });
 	    }, _temp), _possibleConstructorReturn(_this, _ret);
@@ -22196,15 +22204,38 @@
 	
 	  _createClass(App, [{
 	    key: 'componentDidMount',
-	    value: function componentDidMount() {}
+	    value: function componentDidMount() {
+	      var _this2 = this;
+	
+	      onPopState(function (event) {
+	        _this2.setState({
+	          currentContestId: (event.state || {}).currentContestId
+	        });
+	      });
+	    }
 	  }, {
 	    key: 'componentWillUnmount',
 	    value: function componentWillUnmount() {}
 	  }, {
+	    key: 'currentContest',
+	    value: function currentContest() {
+	      return this.state.contests[this.state.currentContestId];
+	    }
+	  }, {
+	    key: 'pageHeader',
+	    value: function pageHeader() {
+	      if (this.state.currentContestId) {
+	        return this.currentContest().contestName;
+	      }
+	      return "Naming Contests";
+	    }
+	  }, {
 	    key: 'currentContent',
 	    value: function currentContent() {
 	      if (this.state.currentContestId) {
-	        return _react2.default.createElement(_Contest2.default, this.state.contests[this.state.currentContestId]);
+	        return _react2.default.createElement(_Contest2.default, _extends({
+	          contestListClick: this.fetchContestList
+	        }, this.currentContest()));
 	      }
 	      return _react2.default.createElement(_ContestList2.default, {
 	        onContestClick: this.fetchContest,
@@ -22216,7 +22247,7 @@
 	      return _react2.default.createElement(
 	        'div',
 	        null,
-	        _react2.default.createElement(_Header2.default, { message: this.state.pageHeader }),
+	        _react2.default.createElement(_Header2.default, { message: this.pageHeader() }),
 	        this.currentContent()
 	      );
 	    }
@@ -22225,6 +22256,9 @@
 	  return App;
 	}(_react2.default.Component);
 	
+	App.propTypes = {
+	  initialData: _react2.default.PropTypes.object.isRequired
+	};
 	;
 	
 	exports.default = App;
@@ -23938,7 +23972,17 @@
 	      return _react2.default.createElement(
 	        "div",
 	        { className: "Contest" },
-	        this.props.description
+	        _react2.default.createElement(
+	          "div",
+	          { className: "contest-description" },
+	          this.props.description
+	        ),
+	        _react2.default.createElement(
+	          "div",
+	          { className: "home-link link",
+	            onClick: this.props.contestListClick },
+	          "Contest List"
+	        )
 	      );
 	    }
 	  }]);
@@ -23947,7 +23991,8 @@
 	}(_react.Component);
 	
 	Contest.propTypes = {
-	  description: _react.PropTypes.string.isRequired
+	  description: _react.PropTypes.string.isRequired,
+	  contestListClick: _react.PropTypes.func.isRequired
 	};
 	
 	exports.default = Contest;
@@ -23964,7 +24009,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.fetchContest = undefined;
+	exports.fetchContestList = exports.fetchContest = undefined;
 	
 	var _axios = __webpack_require__(/*! axios */ 182);
 	
@@ -23975,6 +24020,12 @@
 	var fetchContest = exports.fetchContest = function fetchContest(contestId) {
 	  return _axios2.default.get('/api/contests/' + contestId).then(function (resp) {
 	    return resp.data;
+	  });
+	};
+	
+	var fetchContestList = exports.fetchContestList = function fetchContestList() {
+	  return _axios2.default.get('/api/contests').then(function (resp) {
+	    return resp.data.contests;
 	  });
 	};
 
