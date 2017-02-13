@@ -12,13 +12,13 @@ class Contest extends Component {
             Contest List
           </div>
       </div>
-    )
+    );
   }
 }
 
 Contest.propTypes = {
   description: PropTypes.string.isRequired,
   contestListClick: PropTypes.func.isRequired
-}
+};
 
-export default Contest
+export default Contest;
