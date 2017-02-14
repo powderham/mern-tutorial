@@ -22164,9 +22164,19 @@
 	        });
 	      });
 	    }, _this.fetchNames = function (nameIds) {
+	      if (nameIds.length === 0) {
+	        return;
+	      }
 	      api.fetchNames(nameIds).then(function (names) {
 	        _this.setState({ names: names });
 	      });
+	    }, _this.lookupName = function (nameId) {
+	      if (!_this.state.names || !_this.state.names[nameId]) {
+	        return {
+	          name: '...'
+	        };
+	      }
+	      return _this.state.names[nameId];
 	    }, _temp), _possibleConstructorReturn(_this, _ret);
 	  }
 	
@@ -22205,7 +22215,8 @@
 	      if (this.state.currentContestId) {
 	        return _react2.default.createElement(_Contest2.default, _extends({
 	          contestListClick: this.fetchContestList,
-	          fetchNames: this.fetchNames
+	          fetchNames: this.fetchNames,
+	          lookupName: this.lookupName
 	        }, this.currentContest()));
 	      }
 	      return _react2.default.createElement(_ContestList2.default, {
@@ -23818,6 +23829,8 @@
 	  }, {
 	    key: "render",
 	    value: function render() {
+	      var _this2 = this;
+	
 	      return _react2.default.createElement(
 	        "div",
 	        { className: "Contest" },
@@ -23861,16 +23874,13 @@
 	            _react2.default.createElement(
 	              "ul",
 	              { className: "list-group" },
-	              _react2.default.createElement(
-	                "li",
-	                { className: "list-group-item" },
-	                "Name one..."
-	              ),
-	              _react2.default.createElement(
-	                "li",
-	                { className: "list-group-item" },
-	                "Name two..."
-	              )
+	              this.props.nameIds.map(function (nameId) {
+	                return _react2.default.createElement(
+	                  "li",
+	                  { key: nameId, className: "list-group-item" },
+	                  _this2.props.lookupName(nameId).name
+	                );
+	              })
 	            )
 	          )
 	        ),
@@ -23926,7 +23936,8 @@
 	  description: _react.PropTypes.string.isRequired,
 	  contestListClick: _react.PropTypes.func.isRequired,
 	  fetchNames: _react.PropTypes.func.isRequired,
-	  nameIds: _react.PropTypes.array.isRequired
+	  nameIds: _react.PropTypes.array.isRequired,
+	  lookupName: _react.PropTypes.func.isRequired
 	};
 	
 	exports.default = Contest;
@@ -24090,7 +24101,7 @@
 	
 	var fetchNames = exports.fetchNames = function fetchNames(nameIds) {
 	  return _axios2.default.get('/api/names/' + nameIds.join(',')).then(function (resp) {
-	    return resp.data;
+	    return resp.data.names;
 	  });
 	};
 
