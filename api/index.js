@@ -57,7 +57,7 @@ router.get('/names/:nameIds', (req, res) => {
 
 router.post('/names', (req, res) => {
   const contestId = ObjectID(req.body.contestId);
-  const name = ObjectID(req.body.newName);
+  const name = req.body.newName;
 
   mdb.collection('names').insertOne({name}).then(result =>
     mdb.collection('contests').findAndModify(
